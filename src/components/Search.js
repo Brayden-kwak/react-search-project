@@ -1,41 +1,30 @@
-// import { Collapse } from 'react-collapse';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import useCollapse from 'react-collapsed';
-
 import studentData from '../students.json';
 import { FaPlus } from 'react-icons/fa';
 import { FaMinus } from 'react-icons/fa';
-
+import Tag from './Tag.js';
 import '../styles/search.css';
 
 function Search() {
-    const [keywords, setKeywords] = useState("");
+    const [keywords, setKeywords] = useState({titleValue:"", tagValue:""});
     const [found, setFound] = useState(studentData.students);
+    const [tagWord, setTagWord] = useState("");
+
     const [closeList, setCloseList] = useState(false);
-
-    const [isCategorySelect, setIsCategorySelect] = useState(false);
-
     const { getCollapseProps, getToggleProps } = useCollapse({ closeList });
 
-    const handleClick = (idx) => {
-        isCategorySelect[idx-1]=!isCategorySelect[idx-1];
-        setIsCategorySelect(!closeList);
-    }
+    useEffect(() => {
+        setKeywords(keywords);
+    },[keywords]);
 
-    // const toggle = (e) => {
-    //     //e.preventDefault();
-    //     setCloseList(data => data ? false : true);
-    // }
-
-    
-
-    const filter = (e) => {
+    const filters = (e) => {
         const keyword = e.target.value;
-
+        console.log(keywords.tagValue);
         if(keyword !== ''){
             const results = studentData.students.filter((user)=>{
                 return user.firstName.toLowerCase().startsWith(keyword.toLowerCase()) || user.lastName.toLowerCase().startsWith(keyword.toLowerCase());
-            });
+            });  
             setFound(results);
         }else{
             setFound(studentData.students);
@@ -45,14 +34,23 @@ function Search() {
 
     return (
         <div className='searchContainer'>
-            <input 
-                className="searchBox" 
-                type="text" 
-                value={keywords}
-                placeholder="Search for name or tags" 
-                onChange={filter}
-            />
             <div className="container">
+                <input 
+                    className="searchBox" 
+                    type="text" 
+                    name="titleValue"
+                
+                    placeholder="Search by name" 
+                    onChange={filters}
+                />  
+                <input 
+                    className="searchBox" 
+                    type="text" 
+                    name="tagValue"
+                    
+                    placeholder="Search by tag" 
+                    onChange={filters}
+                />  
                 {found && found.length > 0 ? (
                      found.map((data, index)=>(
                         <div key={index} className="second-container">
@@ -62,42 +60,27 @@ function Search() {
                                 <p>Email: {data.email}</p>
                                 <p>Company: {data.company}</p>
                                 <p>Skill: {data.skill}</p>
-                                <p> Average: {data.grades.reduce((a, c)=> parseInt(a)+parseInt(c)) / data.grades.length}%</p>
+                                <p> Average: {data.grades.reduce((a, c)=> parseInt(a)+parseInt(c)) / data.grades.length}%</p>  
+                                <p 
+                                className="content" 
+                                {...getCollapseProps()}
+                                >
+                                {data.grades.map((grade, index)=> (       
                                 
-                                {/* {closeList ? 
-                                     <p className="content">
-                                     {data.grades.map((grade, index)=> (
-                                         <p>Test{index+1}: {grade}%</p>
-                                     ))}
-                                     </p>
-                                     :
-                                     false
-                                } */}     
-                                    <p 
-                                    className="content" 
-                                    {...getCollapseProps()}
-                                    >
-                                    {data.grades.map((grade, index)=> (       
-                                    
-                                    <p>Test{index+1}: {grade}%</p>                 
-                                       
-                                    ))}
-                                    </p>  
+                                <p>Test{index+1}: {grade}%</p>                 
+                                   
+                                ))}
+                                </p> 
+                                <Tag value={tagWord} onChange={(e)=> setTagWord(e.target.value)}/>                        
                             </div>
                             <div className="fourth-container">
-                                {/* <button 
-                                onClick={toggle}
-                                >
-                                    +
-                                </button> */}
-
                                 <button
                                     {...getToggleProps({
                                         onClick: () => setCloseList((prev) => !prev),
                                     })}  
                                     className="colBtn"
                                 >
-                                    {closeList ?  <FaMinus size={40} className="mr-3"/> : <FaPlus size={40}/>}
+                                    {closeList ?  <FaMinus size={40}/> : <FaPlus size={40}/>}
                                 </button>
                 
                             </div>

@@ -14,6 +14,8 @@
     background-color:#fff;
     margin: 50px;
     box-shadow: 1px 1px 10px 15px rgb(215, 215, 215);
+    justify-content:center;
+    align-items:center;
 }
 .second-container{
     display:flex;
@@ -60,14 +62,17 @@ h1{
     justify-content:center;
 }
 .searchBox{
-    width:65%;
+    width:90%;
     height:100%;
-    font-size: 1.5rem;
-    margin-top: 60px;
+    font-size: 1.3rem;
+    margin-top: 30px;
     padding: 5px;
     border-style: none;
-    border-bottom: solid 2px rgb(140, 140, 140);
-    background-color: rgb(242, 242, 242);
+    border-bottom: solid 2px rgb(191, 191, 191);
+    background-color: #fff;
+}
+.searchBox:focus{
+    border-bottom: solid 3px rgb(144, 144, 144);
 }
 .searchBox:focus{
    outline: none;
@@ -76,8 +81,6 @@ h1{
     margin: 20px;
     text-align: center;
 }
-
-
 .content{
     overflow: hidden;
     transition: max-height 0.3s ease-out;
@@ -90,7 +93,4 @@ h1{
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
-}
-.colBtn{
-    margin-right: 20px;
 }
